@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ContactForm;
 use App\Http\Resources\ContactFormResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ContactFormController extends Controller
 {
@@ -32,6 +33,10 @@ class ContactFormController extends Controller
         ]);
 
         $contactForm = ContactForm::create($validatedData);
+
+        Mail::to(['sales@quadrazon.com'])
+            ->send(new \App\Mail\ContactFormCreated($validatedData));
+
         return new ContactFormResource($contactForm);
     }
 
